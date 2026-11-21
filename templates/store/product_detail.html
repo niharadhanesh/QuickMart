@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} | QuickMart{% endblock %}
+{% block content %}
+<a href="{% url 'home' %}" class="back">&larr; Back to products</a>
+<div class="detail">
+  <div class="thumb big">
+    {% if product.image_url %}<img src="{{ product.image_url }}" alt="{{ product.name }}">{% else %}<span>{{ product.name|first }}</span>{% endif %}
+  </div>
+  <div>
+    <small>{{ product.category.name }}</small>
+    <h1>{{ product.name }}</h1>
+    <div class="price big-price">₹{{ product.price }}</div>
+    <p>{{ product.description|default:"No description available." }}</p>
+    <p class="stock {% if product.stock == 0 %}out{% endif %}">
+      {% if product.stock > 0 %}In stock ({{ product.stock }} available){% else %}Out of stock{% endif %}
+    </p>
+  </div>
+</div>
+{% endblock %}

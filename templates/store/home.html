@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="hero">
+  <h1>Shop smart. Shop quick.</h1>
+  <p>Everything you need, in one place.</p>
+  <form method="get" class="search">
+    <input type="text" name="q" value="{{ q }}" placeholder="Search products...">
+    {% if active_category %}<input type="hidden" name="category" value="{{ active_category }}">{% endif %}
+    <button class="btn" type="submit">Search</button>
+  </form>
+</section>
+
+<div class="chips">
+  <a href="{% url 'home' %}" class="chip {% if not active_category %}active{% endif %}">All</a>
+  {% for c in categories %}
+    <a href="?category={{ c.slug }}" class="chip {% if active_category == c.slug %}active{% endif %}">{{ c.name }}</a>
+  {% endfor %}
+</div>
+
+{% if products %}
+<div class="grid">
+  {% for p in products %}
+  <a class="card" href="{{ p.get_absolute_url }}">
+    <div class="thumb">
+      {% if p.image_url %}<img src="{{ p.image_url }}" alt="{{ p.name }}">{% else %}<span>{{ p.name|first }}</span>{% endif %}
+    </div>
+    <div class="card-body">
+      <small>{{ p.category.name }}</small>
+      <h3>{{ p.name }}</h3>
+      <div class="price">₹{{ p.price }}</div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+  <p class="empty">No products found. Add some in the <a href="{% url 'admin:index' %}">admin panel</a> or run <code>python manage.py seed</code>.</p>
+{% endif %}
+{% endblock %}
